@@ -1,5 +1,14 @@
 const axios = require("axios");
 
+const {
+  calculateActivityScore,
+  calculateCodeQualityScore,
+  calculateDiversityScore,
+  calculateCommunityScore,
+  calculateOverallScore,
+} = require("./scoringService");
+
+
 const fetchUserRepos = async (username) => {
   try {
     const response = await axios.get(
@@ -25,7 +34,6 @@ const getTopRepositories = (repos) => {
     .slice(0, 5);
 };
 
-
 const fetchGitHubProfile = async (username) => {
   try {
     const response = await axios.get(
@@ -35,6 +43,21 @@ const fetchGitHubProfile = async (username) => {
     const repos = await fetchUserRepos(username);
     const topRepos = getTopRepositories(repos);
 
+    const activity = calculateActivityScore(response.data.public_repos);
+    const codeQuality = calculateCodeQualityScore(repos);
+    const diversity = calculateDiversityScore(repos);
+    const community = calculateCommunityScore(
+      response.data.followers,
+      repos
+    );
+
+    const overall = calculateOverallScore({
+      activity,
+      codeQuality,
+      diversity,
+      community,
+    });
+
     return {
       username: response.data.login,
       name: response.data.name,
@@ -43,8 +66,16 @@ const fetchGitHubProfile = async (username) => {
       publicRepos: response.data.public_repos,
       avatar: response.data.avatar_url,
 
-      
       topRepos: topRepos,
+
+
+      scores: {
+        activity,
+        codeQuality,
+        diversity,
+        community,
+        overall,
+      },
     };
   } catch (error) {
     throw new Error("User not found");
