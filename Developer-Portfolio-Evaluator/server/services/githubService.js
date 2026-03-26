@@ -6,8 +6,8 @@ const {
   calculateDiversityScore,
   calculateCommunityScore,
   calculateOverallScore,
+  getDeveloperLevel, 
 } = require("./scoringService");
-
 
 const fetchUserRepos = async (username) => {
   try {
@@ -34,6 +34,7 @@ const getTopRepositories = (repos) => {
     .slice(0, 5);
 };
 
+
 const fetchGitHubProfile = async (username) => {
   try {
     const response = await axios.get(
@@ -43,7 +44,12 @@ const fetchGitHubProfile = async (username) => {
     const repos = await fetchUserRepos(username);
     const topRepos = getTopRepositories(repos);
 
-    const activity = calculateActivityScore(response.data.public_repos);
+    
+    const activity = calculateActivityScore(
+      response.data.public_repos,
+      repos
+    );
+
     const codeQuality = calculateCodeQualityScore(repos);
     const diversity = calculateDiversityScore(repos);
     const community = calculateCommunityScore(
@@ -58,6 +64,9 @@ const fetchGitHubProfile = async (username) => {
       community,
     });
 
+    // 🔥 NEW
+    const level = getDeveloperLevel(overall);
+
     return {
       username: response.data.login,
       name: response.data.name,
@@ -68,7 +77,6 @@ const fetchGitHubProfile = async (username) => {
 
       topRepos: topRepos,
 
-
       scores: {
         activity,
         codeQuality,
@@ -76,6 +84,9 @@ const fetchGitHubProfile = async (username) => {
         community,
         overall,
       },
+
+      
+      level: level,
     };
   } catch (error) {
     throw new Error("User not found");
