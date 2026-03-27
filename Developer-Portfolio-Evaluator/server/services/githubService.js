@@ -6,8 +6,9 @@ const {
   calculateDiversityScore,
   calculateCommunityScore,
   calculateOverallScore,
-  getDeveloperLevel, 
+  getDeveloperLevel,
 } = require("./scoringService");
+
 
 const fetchUserRepos = async (username) => {
   try {
@@ -23,6 +24,10 @@ const fetchUserRepos = async (username) => {
       url: repo.html_url,
     }));
   } catch (error) {
+    
+    if (error.response && error.response.status === 404) {
+      throw new Error("Repositories not found");
+    }
     throw new Error("Error fetching repositories");
   }
 };
@@ -64,7 +69,6 @@ const fetchGitHubProfile = async (username) => {
       community,
     });
 
-    // 🔥 NEW
     const level = getDeveloperLevel(overall);
 
     return {
@@ -85,11 +89,15 @@ const fetchGitHubProfile = async (username) => {
         overall,
       },
 
-      
       level: level,
     };
   } catch (error) {
-    throw new Error("User not found");
+    
+    if (error.response && error.response.status === 404) {
+      throw new Error("GitHub user not found");
+    }
+
+    throw new Error("Something went wrong while fetching data");
   }
 };
 
