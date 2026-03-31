@@ -13,8 +13,13 @@ const {
 const fetchUserRepos = async (username) => {
   try {
     const response = await axios.get(
-      `https://api.github.com/users/${username}/repos?per_page=100`
-    );
+  `https://api.github.com/users/${username}/repos?per_page=100`,
+  {
+    headers: {
+      "User-Agent": "node.js",
+    },
+  }
+);
 
     return response.data.map((repo) => ({
       name: repo.name,
@@ -43,8 +48,13 @@ const getTopRepositories = (repos) => {
 const fetchGitHubProfile = async (username) => {
   try {
     const response = await axios.get(
-      `https://api.github.com/users/${username}`
-    );
+  `https://api.github.com/users/${username}`,
+  {
+    headers: {
+      "User-Agent": "node.js",
+    },
+  }
+);
 
     const repos = await fetchUserRepos(username);
     const topRepos = getTopRepositories(repos);
