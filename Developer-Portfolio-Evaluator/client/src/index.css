@@ -1,110 +1,131 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
-    rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
+/* RESET */
+body {
+  margin: 0;
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  color: var(--text);
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #0a0a0a;
+  color: #fff;
 }
 
-/* Layout */
-body {
+/* MAIN LAYOUT */
+.main {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  min-height: 100vh;
+}
+
+/* LEFT CARD */
+.card-left {
+  width: 300px;
+  background: linear-gradient(145deg, #111, #1c1c1c);
+  border-radius: 20px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(0, 255, 150, 0.15);
+}
+
+.avatar {
+  width: 110px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  border: 3px solid #22c55e;
+}
+
+.bio {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 15px;
+}
+
+.score-box {
+  margin-top: 20px;
+}
+
+.score-box h1 {
+  font-size: 42px;
+  color: #22c55e;
   margin: 0;
 }
 
-#root {
-  text-align: center;
-  padding: 40px;
+.score-box p {
+  color: #aaa;
 }
 
-/* Headings */
-h1 {
-  color: white;
+/* RIGHT SIDE */
+.card-right {
+  flex: 1;
 }
 
-h2 {
-  color: white;
+/* HEADINGS */
+h1, h2, h3 {
+  margin: 10px 0;
 }
 
-/* 🔥 Search Box */
+/* PROGRESS */
+.progress-item {
+  margin: 15px 0;
+}
+
+.progress-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #222;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+/* REPO CARD */
+.repo-card {
+  background: #111;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 10px 0;
+  transition: 0.3s;
+}
+
+.repo-card:hover {
+  background: #1f1f1f;
+  transform: translateY(-3px);
+  cursor: pointer;
+}
+
+/* SEARCH PAGE */
+.search-box {
+  margin-top: 100px;
+}
+
 .search-box input {
   padding: 12px;
-  width: 250px;
+  width: 260px;
   border-radius: 8px;
   border: none;
   margin-right: 10px;
+  outline: none;
 }
 
 .search-box button {
   padding: 12px 18px;
   border-radius: 8px;
   border: none;
-  background: #ff7a18;
-  color: white;
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  color: black;
+  font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
 }
 
 .search-box button:hover {
   opacity: 0.8;
-}
-
-/* 🔥 Profile Card */
-.card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 25px;
-  width: 320px;
-  margin: 30px auto;
-  box-shadow: var(--shadow);
-  color: white;
-}
-
-/* Avatar */
-.avatar {
-  width: 110px;
-  border-radius: 50%;
-  border: 3px solid white;
-}
-
-/* Scores */
-.scores {
-  margin-top: 20px;
-  color: white;
-}
-
-/* 🔥 Repo Cards */
-.repo-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  margin: 10px auto;
-  border-radius: 10px;
-  width: 80%;
-  color: white;
-  transition: 0.3s;
-}
-
-.repo-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
-}
-
-/* Links */
-.repo-card a {
-  color: #ffd700;
-  text-decoration: none;
-}
-.scores {
-  width: 300px;
-  margin: 20px auto;
-  text-align: left;
 }
