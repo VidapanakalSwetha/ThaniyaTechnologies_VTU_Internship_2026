@@ -1,69 +1,55 @@
-import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-import { Radar } from "react-chartjs-2";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-
-ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 
 function Report() {
   const { username } = useParams();
 
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
-      setLoading(true);
       try {
         const res = await fetch(
           `http://localhost:5000/api/profile/${username}`
         );
         const result = await res.json();
-        setData(result);
+
+        if (isMounted) {
+          setData(result);
+          setLoading(false);
+        }
       } catch (error) {
         console.log(error);
+        if (isMounted) setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [username]);
 
-  // 🔥 Chart Data
-  const chartData = {
-    labels: ["Activity", "Code", "Diversity", "Community"],
-    datasets: [
-      {
-        label: "Score",
-        data: [
-          data?.data?.scores?.activity || 0,
-          data?.data?.scores?.codeQuality || 0,
-          data?.data?.scores?.diversity || 0,
-          data?.data?.scores?.community || 0,
-        ],
-        backgroundColor: "rgba(34,197,94,0.2)",
-        borderColor: "#22c55e",
-        borderWidth: 2,
-      },
-    ],
-  };
-
+ 
   if (loading) return <p>⏳ Loading...</p>;
 
   if (!data || !data.success) {
     return <p style={{ color: "red" }}>User not found</p>;
   }
 
+  const getColor = (val) => {
+  if (val >= 80) return "#22c55e";
+  if (val >= 50) return "#facc15";
+  return "#ef4444";
+};
+
   return (
     <div className="main">
-      {/* LEFT CARD */}
+      {/* LEFT */}
       <div className="card-left">
         <img src={data.data.avatar} className="avatar" />
 
@@ -75,7 +61,6 @@ function Report() {
           <p>{data.data.level}</p>
         </div>
 
-        {/* 🔥 Hireability */}
         <h3 className="badge">
           {data.data.scores.overall >= 80
             ? "🔥 Highly Hireable"
@@ -85,12 +70,9 @@ function Report() {
         </h3>
       </div>
 
-      {/* RIGHT SIDE */}
+      
       <div className="card-right">
-        <h3>📊 Performance Chart</h3>
-        <Radar data={chartData} />
-
-        <h3 style={{ marginTop: "20px" }}>Score Breakdown</h3>
+        <h3>📊 Score Breakdown</h3>
 
         {[
           { label: "Activity", value: data.data.scores.activity },
@@ -107,7 +89,9 @@ function Report() {
             <div className="progress-bar">
               <div
                 className="progress-fill"
-                style={{ width: `${item.value}%` }}
+                style={{ width: `${item.value}%`,
+                background: getColor(item.value),
+               }}
               />
             </div>
           </div>
