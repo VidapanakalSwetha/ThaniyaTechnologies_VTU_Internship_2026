@@ -34,18 +34,33 @@ function Report() {
     };
   }, [username]);
 
- 
-  if (loading) return <p>⏳ Loading...</p>;
+  const getColor = (val) => {
+    if (val >= 80) return "#22c55e";
+    if (val >= 50) return "#facc15";
+    return "#ef4444";
+  };
 
-  if (!data || !data.success) {
-    return <p style={{ color: "red" }}>User not found</p>;
+  // 🔥 LOADER UI
+  if (loading) {
+    return (
+      <div className="center">
+        <div className="loader"></div>
+        <p>Analyzing developer...</p>
+      </div>
+    );
   }
 
-  const getColor = (val) => {
-  if (val >= 80) return "#22c55e";
-  if (val >= 50) return "#facc15";
-  return "#ef4444";
-};
+  // 🔥 ERROR UI
+  if (!data || !data.success) {
+    return (
+      <div className="center">
+        <div className="error-card">
+          <h2>❌ User Not Found</h2>
+          <p>Please check the username and try again</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="main">
@@ -70,7 +85,7 @@ function Report() {
         </h3>
       </div>
 
-      
+      {/* RIGHT */}
       <div className="card-right">
         <h3>📊 Score Breakdown</h3>
 
@@ -89,9 +104,10 @@ function Report() {
             <div className="progress-bar">
               <div
                 className="progress-fill"
-                style={{ width: `${item.value}%`,
-                background: getColor(item.value),
-               }}
+                style={{
+                  width: `${item.value}%`,
+                  background: getColor(item.value),
+                }}
               />
             </div>
           </div>
@@ -106,11 +122,6 @@ function Report() {
             target="_blank"
             rel="noopener noreferrer"
             className="repo-card"
-            style={{
-              textDecoration: "none",
-              color: "white",
-              display: "block",
-            }}
           >
             <h4>{repo.name}</h4>
             <p>{repo.language || "Unknown"}</p>

@@ -1,74 +1,54 @@
 /* RESET */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* BACKGROUND */
 body {
-  font-family: system-ui, sans-serif;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
   color: white;
 }
 
 /* MAIN LAYOUT */
 .main {
   display: flex;
-  gap: 30px;
-  padding: 40px;
-  min-height: 100vh;
+  gap: 20px;
+  padding: 30px;
 }
 
-/* LEFT PANEL */
+/* LEFT CARD */
 .card-left {
   width: 30%;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
+  background: #1e293b;
+  padding: 20px;
   border-radius: 20px;
-  padding: 30px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-/* RIGHT PANEL */
+/* RIGHT CARD */
 .card-right {
   width: 70%;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
+  background: #1e293b;
+  padding: 20px;
   border-radius: 20px;
-  padding: 30px;
 }
 
 /* AVATAR */
 .avatar {
   width: 120px;
   border-radius: 50%;
-  border: 3px solid #22c55e;
-  margin-bottom: 15px;
 }
 
 /* BIO */
 .bio {
-  font-size: 14px;
-  color: #cbd5f5;
-  margin: 10px 0;
+  color: #94a3b8;
 }
 
 /* SCORE BOX */
 .score-box {
-  margin-top: 20px;
-}
-
-.score-box h1 {
-  font-size: 50px;
-  color: #22c55e;
+  margin: 20px 0;
 }
 
 /* BADGE */
 .badge {
-  margin-top: 15px;
-  font-size: 18px;
+  margin-top: 10px;
 }
 
 /* PROGRESS */
@@ -79,38 +59,69 @@ body {
 .progress-head {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px;
 }
 
 .progress-bar {
   height: 10px;
-  background: #1e293b;
+  background: #334155;
   border-radius: 10px;
-  overflow: hidden;
+  margin-top: 5px;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #22c55e, #4ade80);
-  transition: 0.4s;
+  border-radius: 10px;
 }
 
-/* REPO CARDS */
+/* REPO CARD */
 .repo-card {
-  background: rgba(255, 255, 255, 0.08);
+  display: block;
+  background: #0f172a;
   padding: 15px;
-  margin: 12px 0;
-  border-radius: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: white;
   transition: 0.3s;
 }
 
 .repo-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  background: rgba(255, 255, 255, 0.12);
+  background: #334155;
 }
 
-/* LINKS */
-.repo-card a {
-  text-decoration: none;
+/* CENTER ALIGN */
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* LOADER */
+.loader {
+  border: 5px solid #1e293b;
+  border-top: 5px solid #22c55e;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ERROR CARD */
+.error-card {
+  background: rgba(255, 0, 0, 0.1);
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+}
+a {
   color: white;
 }
