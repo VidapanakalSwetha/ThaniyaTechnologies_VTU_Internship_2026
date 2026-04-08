@@ -9,13 +9,17 @@ const {
   getDeveloperLevel,
 } = require("./scoringService");
 
-// 🔥 Common headers (important for GitHub API)
+// 🔥 ADD YOUR TOKEN HERE
+const GITHUB_TOKEN =  process.env.GITHUB_TOKEN;
+
+// 🔥 Common headers
 const axiosConfig = {
   headers: {
     "User-Agent": "portfolio-evaluator-app",
     Accept: "application/vnd.github.v3+json",
+    Authorization: `token ${GITHUB_TOKEN}`, // ✅ IMPORTANT
   },
-  timeout: 10000, // 10 seconds timeout
+  timeout: 10000,
 };
 
 // 🔹 Fetch Repositories
@@ -34,7 +38,7 @@ const fetchUserRepos = async (username) => {
       url: repo.html_url,
     }));
   } catch (error) {
-    console.error("Repo Fetch Error:", error.message);
+    console.error("Repo Fetch Error:", error.response?.data || error.message);
 
     if (error.response?.status === 404) {
       throw new Error("Repositories not found");
@@ -109,7 +113,7 @@ const fetchGitHubProfile = async (username) => {
       level,
     };
   } catch (error) {
-    console.error("Profile Fetch Error:", error.message);
+    console.error("Profile Fetch Error:", error.response?.data || error.message);
 
     if (error.response?.status === 404) {
       throw new Error("GitHub user not found");

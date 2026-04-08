@@ -40,7 +40,7 @@ function Report() {
     return "#ef4444";
   };
 
-  // 🔥 LOADER UI
+  // 🔥 LOADER
   if (loading) {
     return (
       <div className="center">
@@ -50,7 +50,7 @@ function Report() {
     );
   }
 
-  // 🔥 ERROR UI
+  // 🔥 ERROR
   if (!data || !data.success) {
     return (
       <div className="center">
@@ -61,6 +61,22 @@ function Report() {
       </div>
     );
   }
+
+  // 🔥 Find top language
+  const languageCount = {};
+  data.data.topRepos.forEach((repo) => {
+    if (repo.language) {
+      languageCount[repo.language] =
+        (languageCount[repo.language] || 0) + 1;
+    }
+  });
+
+  const topLanguage =
+    Object.keys(languageCount).length > 0
+      ? Object.keys(languageCount).reduce((a, b) =>
+          languageCount[a] > languageCount[b] ? a : b
+        )
+      : "N/A";
 
   return (
     <div className="main">
@@ -83,11 +99,32 @@ function Report() {
             ? "👍 Hireable"
             : "⚠️ Needs Improvement"}
         </h3>
+
+        {/* 🔥 PROFILE BUTTON */}
+        <a
+          href={`https://github.com/${username}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="repo-card"
+          style={{ marginTop: "20px", display: "block" }}
+        >
+          🔗 View GitHub Profile
+        </a>
       </div>
 
       {/* RIGHT */}
       <div className="card-right">
-        <h3>📊 Score Breakdown</h3>
+        {/* 🔥 INSIGHTS PANEL */}
+        <h3>🚀 Developer Insights</h3>
+
+        <div className="repo-card">
+          <p>📦 Total Repositories: {data.data.publicRepos}</p>
+          <p>👥 Followers: {data.data.followers}</p>
+          <p>🧠 Top Language: {topLanguage}</p>
+        </div>
+
+        {/* SCORES */}
+        <h3 style={{ marginTop: "20px" }}>📊 Score Breakdown</h3>
 
         {[
           { label: "Activity", value: data.data.scores.activity },
@@ -113,6 +150,7 @@ function Report() {
           </div>
         ))}
 
+        {/* PROJECTS */}
         <h3 style={{ marginTop: "20px" }}>🔥 Top Projects</h3>
 
         {data.data.topRepos.map((repo, i) => (
