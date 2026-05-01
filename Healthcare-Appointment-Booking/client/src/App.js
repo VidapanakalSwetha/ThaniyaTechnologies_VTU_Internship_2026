@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import PatientDashboard from './pages/PatientDashboard';
 
 function App() {
   const { user } = useAuth();
@@ -12,11 +13,11 @@ function App() {
     <Router>
       <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
-        <Route path="/login" element={!user ? <Login /> : <Navigate to="/patient/dashboard" />} />
-        <Route path="/register" element={!user ? <Register /> : <Navigate to="/patient/dashboard" />} />
-        <Route path="/patient/dashboard" element={user ? <div style={{padding:'40px', fontSize:'24px'}}>🎉 Welcome {user.name}! Patient Dashboard Coming Soon...</div> : <Navigate to="/login" />} />
-        <Route path="/doctor/dashboard" element={user ? <div style={{padding:'40px', fontSize:'24px'}}>🎉 Welcome Dr. {user.name}! Doctor Dashboard Coming Soon...</div> : <Navigate to="/login" />} />
-        <Route path="/admin/dashboard" element={user ? <div style={{padding:'40px', fontSize:'24px'}}>🎉 Welcome {user.name}! Admin Dashboard Coming Soon...</div> : <Navigate to="/login" />} />
+        <Route path="/login" element={!user ? <Login /> : <Navigate to={`/${user.role}/dashboard`} />} />
+        <Route path="/register" element={!user ? <Register /> : <Navigate to={`/${user.role}/dashboard`} />} />
+        <Route path="/patient/dashboard" element={user?.role === 'patient' ? <PatientDashboard /> : <Navigate to="/login" />} />
+        <Route path="/doctor/dashboard" element={user ? <div style={{padding:'40px'}}>Doctor Dashboard Coming Soon...</div> : <Navigate to="/login" />} />
+        <Route path="/admin/dashboard" element={user ? <div style={{padding:'40px'}}>Admin Dashboard Coming Soon...</div> : <Navigate to="/login" />} />
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
