@@ -68,9 +68,27 @@ const PatientDashboard = () => {
     }
   };
 
+  const specializations = ['All', ...new Set(doctors.map(doc => doc.specialization))];
+
   const filteredDoctors = doctors.filter(doc =>
-    doc.specialization.toLowerCase().includes(searchSpec.toLowerCase())
+    searchSpec === '' || searchSpec === 'All'
+      ? true
+      : doc.specialization.toLowerCase().includes(searchSpec.toLowerCase())
   );
+
+  const getSpecColor = (spec) => {
+    const colors = {
+      'Cardiologist': '#ef4444',
+      'Dermatologist': '#f59e0b',
+      'Neurologist': '#8b5cf6',
+      'Pediatrician': '#10b981',
+      'Orthopedic': '#3b82f6',
+      'Gynecologist': '#ec4899',
+      'Dentist': '#06b6d4',
+      'Psychiatrist': '#6366f1'
+    };
+    return colors[spec] || '#667eea';
+  };
 
   const getStatusColor = (status) => {
     const colors = {
@@ -86,7 +104,22 @@ const PatientDashboard = () => {
     <div style={styles.container}>
       <Navbar />
       <div style={styles.content}>
-        <h1 style={styles.heading}>Patient Dashboard</h1>
+        <div style={styles.banner}>
+          <div>
+            <h1 style={styles.bannerTitle}>👋 Welcome back!</h1>
+            <p style={styles.bannerSubtitle}>Find the best doctors and book appointments instantly</p>
+          </div>
+          <div style={styles.bannerStats}>
+            <div style={styles.bannerStat}>
+              <span style={styles.bannerStatNum}>{doctors.length}</span>
+              <span style={styles.bannerStatLabel}>Doctors</span>
+            </div>
+            <div style={styles.bannerStat}>
+              <span style={styles.bannerStatNum}>{appointments.length}</span>
+              <span style={styles.bannerStatLabel}>My Appointments</span>
+            </div>
+          </div>
+        </div>
 
         {/* Tabs */}
         <div style={styles.tabs}>
@@ -114,6 +147,21 @@ const PatientDashboard = () => {
               value={searchSpec}
               onChange={(e) => setSearchSpec(e.target.value)}
             />
+            <div style={styles.filterBtns}>
+              {specializations.map(spec => (
+                <button
+                  key={spec}
+                  style={{
+                    ...styles.filterBtn,
+                    ...(searchSpec === spec || (spec === 'All' && searchSpec === '')
+                      ? styles.filterBtnActive : {})
+                  }}
+                  onClick={() => setSearchSpec(spec === 'All' ? '' : spec)}
+                >
+                  {spec}
+                </button>
+              ))}
+            </div>
             {loading ? (
               <p style={styles.loading}>Loading doctors...</p>
             ) : filteredDoctors.length === 0 ? (
@@ -128,7 +176,13 @@ const PatientDashboard = () => {
                       </div>
                       <div>
                         <h3 style={styles.doctorName}>{doctor.user.name}</h3>
-                        <span style={styles.spec}>{doctor.specialization}</span>
+                        <span style={{
+                        ...styles.spec,
+                        background: getSpecColor(doctor.specialization) + '20',
+                        color: getSpecColor(doctor.specialization)
+                      }}>
+                        {doctor.specialization}
+                      </span>
                       </div>
                     </div>
                     <div style={styles.cardBody}>
@@ -350,7 +404,26 @@ const styles = {
   input: {
     width: '100%', padding: '10px 15px', border: '2px solid #eee',
     borderRadius: '8px', fontSize: '14px', outline: 'none', boxSizing: 'border-box'
-  }
+  },
+  filterBtns: { display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' },
+  filterBtn: {
+    padding: '6px 16px', border: '2px solid #667eea', borderRadius: '20px',
+    background: 'white', color: '#667eea', cursor: 'pointer',
+    fontWeight: '600', fontSize: '13px'
+  },
+  filterBtnActive: { background: '#667eea', color: 'white' },
+banner: {
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    borderRadius: '15px', padding: '25px 30px', marginBottom: '25px',
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+    color: 'white'
+  },
+  bannerTitle: { fontSize: '24px', fontWeight: '700', margin: '0 0 5px' },
+  bannerSubtitle: { fontSize: '14px', opacity: '0.9', margin: '0' },
+  bannerStats: { display: 'flex', gap: '30px' },
+  bannerStat: { textAlign: 'center' },
+  bannerStatNum: { display: 'block', fontSize: '28px', fontWeight: '700' },
+  bannerStatLabel: { fontSize: '12px', opacity: '0.9' },
 };
 
 export default PatientDashboard;
